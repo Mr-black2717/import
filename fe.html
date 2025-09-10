@@ -1,1 +1,796 @@
-hello
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natural - Pet Shop Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff6b6b;
+            --success: #1dd1a1;
+            --warning: #feca57;
+            --info: #48dbfb;
+            --light: #f5f6fa;
+            --dark: #2f3542;
+            --glass: rgba(255, 255, 255, 0.15);
+            --glass-dark: rgba(0, 0, 0, 0.2);
+            --border-radius: 16px;
+            --blur: blur(10px);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: var(--glass);
+            backdrop-filter: var(--blur);
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px var(--glass-dark);
+            animation: slideDown 0.7s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 32px;
+            color: var(--accent);
+        }
+
+        .logo h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 28px;
+            background: linear-gradient(to right, #fff, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: var(--glass);
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: var(--blur);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--glass-dark);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            box-shadow: 0 5px 15px var(--glass-dark);
+        }
+
+        /* Auth Buttons */
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-login {
+            background: linear-gradient(to right, var(--success), #10ac84);
+            color: white;
+        }
+
+        .btn-register {
+            background: linear-gradient(to right, var(--accent), #ee5253);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--glass-dark);
+        }
+
+        /* Dashboard Content */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--glass);
+            backdrop-filter: var(--blur);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--glass-dark);
+            animation: slideLeft 0.7s ease;
+        }
+
+        .sidebar-title {
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+
+        .sidebar-title i {
+            color: var(--accent);
+        }
+
+        .module-list {
+            list-style: none;
+        }
+
+        .module-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .module-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .module-item.active {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            box-shadow: 0 5px 15px var(--glass-dark);
+        }
+
+        .module-item i {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--glass);
+            backdrop-filter: var(--blur);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: 0 10px 30px var(--glass-dark);
+            min-height: 600px;
+            animation: slideRight 0.7s ease;
+        }
+
+        .module-content {
+            display: none;
+        }
+
+        .module-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .module-header {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .module-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            background: linear-gradient(to right, #fff, #48dbfb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: var(--blur);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px var(--glass-dark);
+        }
+
+        .card:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 15px 30px var(--glass-dark);
+        }
+
+        .card-img {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .card:hover .card-img img {
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid var(--glass);
+            background: var(--glass-dark);
+            color: white;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--info);
+            box-shadow: 0 0 0 3px rgba(72, 219, 251, 0.3);
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--glass);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .data-table th, .data-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--glass);
+        }
+
+        .data-table th {
+            background: var(--glass-dark);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--glass);
+            backdrop-filter: var(--blur);
+            border-radius: var(--border-radius);
+            margin-top: 30px;
+            box-shadow: 0 10px 30px var(--glass-dark);
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideLeft {
+            from {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideRight {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .auth-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-paw"></i>
+                <h1>Natural Pet Shop</h1>
+            </div>
+            
+            <nav>
+                <button class="nav-btn active" data-module="home"><i class="fas fa-home"></i> Home</button>
+                <button class="nav-btn" data-module="pets"><i class="fas fa-dog"></i> Pets</button>
+                <button class="nav-btn" data-module="services"><i class="fas fa-concierge-bell"></i> Services</button>
+                <button class="nav-btn" data-module="orders"><i class="fas fa-shopping-cart"></i> My Orders</button>
+                <button class="nav-btn" data-module="customers"><i class="fas fa-users"></i> Customers</button>
+            </nav>
+            
+            <div class="auth-buttons">
+                <button class="btn btn-login"><i class="fas fa-sign-in-alt"></i> Login</button>
+                <button class="btn btn-register"><i class="fas fa-user-plus"></i> Register</button>
+            </div>
+        </header>
+        
+        <div class="dashboard">
+            <aside class="sidebar">
+                <h2 class="sidebar-title"><i class="fas fa-th-large"></i> Dashboard Modules</h2>
+                <ul class="module-list">
+                    <li class="module-item active" data-module="home"><i class="fas fa-home"></i> Home</li>
+                    <li class="module-item" data-module="pets"><i class="fas fa-dog"></i> Pets Management</li>
+                    <li class="module-item" data-module="services"><i class="fas fa-concierge-bell"></i> Services</li>
+                    <li class="module-item" data-module="orders"><i class="fas fa-shopping-cart"></i> My Orders</li>
+                    <li class="module-item" data-module="customers"><i class="fas fa-users"></i> Customer Management</li>
+                </ul>
+            </aside>
+            
+            <main class="main-content">
+                <!-- Home Module -->
+                <div class="module-content active" id="home-module">
+                    <div class="module-header">
+                        <h2>Welcome to Natural Pet Shop</h2>
+                        <button class="btn btn-login" id="refresh-facts">New Pet Facts</button>
+                    </div>
+                    
+                    <div class="cards-grid" id="pet-facts-container">
+                        <!-- Pet facts will be loaded here dynamically -->
+                    </div>
+                </div>
+                
+                <!-- Pets Module -->
+                <div class="module-content" id="pets-module">
+                    <div class="module-header">
+                        <h2>Pets Management</h2>
+                        <button class="btn btn-register"><i class="fas fa-plus"></i> Add New Pet</button>
+                    </div>
+                    
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-img">
+                                <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=662&q=80" alt="Golden Retriever">
+                            </div>
+                            <div class="card-content">
+                                <h3>Golden Retriever</h3>
+                                <p>Friendly, intelligent and devoted. These dogs are great with children and other pets.</p>
+                                <p><strong>Price:</strong> $800</p>
+                                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                                    <button class="btn btn-login" style="padding: 8px 15px;">Edit</button>
+                                    <button class="btn btn-register" style="padding: 8px 15px;">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-img">
+                                <img src="https://images.unsplash.com/photo-1561948955-570b270e7c36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=601&q=80" alt="British Shorthair">
+                            </div>
+                            <div class="card-content">
+                                <h3>British Shorthair</h3>
+                                <p>Calm, easygoing and affectionate. Known for their dense coat and rounded appearance.</p>
+                                <p><strong>Price:</strong> $600</p>
+                                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                                    <button class="btn btn-login" style="padding: 8px 15px;">Edit</button>
+                                    <button class="btn btn-register" style="padding: 8px 15px;">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-img">
+                                <img src="https://images.unsplash.com/photo-1593620659530-7f0726a5edd6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=686&q=80" alt="Parrot">
+                            </div>
+                            <div class="card-content">
+                                <h3>African Grey Parrot</h3>
+                                <p>Highly intelligent and known for their exceptional talking ability. Lifespan up to 60 years.</p>
+                                <p><strong>Price:</strong> $1200</p>
+                                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                                    <button class="btn btn-login" style="padding: 8px 15px;">Edit</button>
+                                    <button class="btn btn-register" style="padding: 8px 15px;">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Services Module -->
+                <div class="module-content" id="services-module">
+                    <div class="module-header">
+                        <h2>Our Services</h2>
+                        <button class="btn btn-login"><i class="fas fa-calendar"></i> Book Appointment</button>
+                    </div>
+                    
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-img">
+                                <img src="https://images.unsplash.com/photo-1596272875729-ed2ff7d6d9c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Grooming Service">
+                            </div>
+                            <div class="card-content">
+                                <h3>Professional Grooming</h3>
+                                <p>Our professional grooming services will keep your pet looking and feeling their best. Includes bath, haircut, nail trimming, and more.</p>
+                                <p><strong>Price:</strong> Starting at $40</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-img">
+                                <img src="https://images.unsplash.com/photo-1577982787983-e07c6730f2d3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1159&q=80" alt="Veterinary Service">
+                            </div>
+                            <div class="card-content">
+                                <h3>Veterinary Care</h3>
+                                <p>Comprehensive health services including vaccinations, check-ups, dental care, and emergency services.</p>
+                                <p><strong>Price:</strong> Varies by service</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-img">
+                                <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Training Service">
+                            </div>
+                            <div class="card-content">
+                                <h3>Obedience Training</h3>
+                                <p>Professional training programs to help your pet learn basic commands, socialization, and good behavior.</p>
+                                <p><strong>Price:</strong> $120 for 4 sessions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- My Orders Module -->
+                <div class="module-content" id="orders-module">
+                    <div class="module-header">
+                        <h2>My Orders</h2>
+                        <button class="btn btn-login"><i class="fas fa-sync"></i> Refresh Orders</button>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Pet/Service</th>
+                                <th>Date</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#ORD-001</td>
+                                <td>Golden Retriever Puppy</td>
+                                <td>2023-06-15</td>
+                                <td>$800</td>
+                                <td>Delivered</td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-002</td>
+                                <td>Professional Grooming</td>
+                                <td>2023-07-22</td>
+                                <td>$50</td>
+                                <td>Completed</td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-003</td>
+                                <td>Vaccination Package</td>
+                                <td>2023-08-10</td>
+                                <td>$120</td>
+                                <td>Upcoming</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Customer Management Module -->
+                <div class="module-content" id="customers-module">
+                    <div class="module-header">
+                        <h2>Customer Management</h2>
+                        <button class="btn btn-register"><i class="fas fa-plus"></i> Add Customer</button>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Orders</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#CUST-001</td>
+                                <td>John Smith</td>
+                                <td>+1 (555) 123-4567</td>
+                                <td>5</td>
+                                <td>Active</td>
+                                <td>
+                                    <button class="btn btn-login" style="padding: 5px 10px; font-size: 12px;">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#CUST-002</td>
+                                <td>Emily Johnson</td>
+                                <td>+1 (555) 987-6543</td>
+                                <td>3</td>
+                                <td>Active</td>
+                                <td>
+                                    <button class="btn btn-login" style="padding: 5px 10px; font-size: 12px;">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#CUST-003</td>
+                                <td>Michael Brown</td>
+                                <td>+1 (555) 456-7890</td>
+                                <td>2</td>
+                                <td>Inactive</td>
+                                <td>
+                                    <button class="btn btn-login" style="padding: 5px 10px; font-size: 12px;">View</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+        
+        <footer>
+            <p>© 2023 Natural Pet Shop Management System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Module switching functionality
+            const moduleItems = document.querySelectorAll('.module-item');
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const moduleContents = document.querySelectorAll('.module-content');
+            
+            function switchModule(moduleIndex) {
+                // Remove active class from all modules
+                moduleContents.forEach(content => content.classList.remove('active'));
+                moduleItems.forEach(item => item.classList.remove('active'));
+                navButtons.forEach(button => button.classList.remove('active'));
+                
+                // Add active class to selected module
+                moduleContents[moduleIndex].classList.add('active');
+                moduleItems[moduleIndex].classList.add('active');
+                navButtons[moduleIndex].classList.add('active');
+                
+                // If home module is selected, load pet facts
+                if (moduleIndex === 0) {
+                    loadPetFacts();
+                }
+            }
+            
+            // Add event listeners to sidebar items
+            moduleItems.forEach((item, index) => {
+                item.addEventListener('click', () => switchModule(index));
+            });
+            
+            // Add event listeners to nav buttons
+            navButtons.forEach((button, index) => {
+                button.addEventListener('click', () => switchModule(index));
+            });
+            
+            // Login/Register modal functionality (simplified)
+            const loginBtn = document.querySelector('.btn-login');
+            const registerBtn = document.querySelector('.btn-register');
+            
+            loginBtn.addEventListener('click', function() {
+                alert('Login modal would appear here.\nAdmin Login: username: admin, password: admin123');
+            });
+            
+            registerBtn.addEventListener('click', function() {
+                alert('Registration modal would appear here.\nCustomers can register with mobile number, username, and password.');
+            });
+            
+            // Pet facts data
+            const petFacts = [
+                {
+                    image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80",
+                    title: "Did You Know?",
+                    content: "Dogs have a sense of time. They can tell the difference between an hour and five hours. If they're left alone for too long, they can figure out how long they've been alone."
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80",
+                    title: "Cat Fact",
+                    content: "Cats can rotate their ears 180 degrees. The hearing of the average cat is at least five times keener than that of a human adult."
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1596272875729-ed2ff7d6d9c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+                    title: "Pet Care Tip",
+                    content: "Regular vet check-ups are essential for your pet's health. Annual visits can help catch potential health issues early and keep your pet healthy and happy."
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+                    title: "Dog Fact",
+                    content: "A dog's nose print is unique, much like a person's fingerprint. This is why some organizations use nose prints for identification purposes."
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1143&q=80",
+                    title: "Cat Behavior",
+                    content: "Cats often rub against people to mark their territory with scent glands located on their faces. This is a sign of affection and ownership."
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+                    title: "Pet Nutrition",
+                    content: "Different pets have different nutritional needs. Always consult with your vet to ensure you're feeding your pet the right food in the right amounts."
+                }
+            ];
+            
+            // Load pet facts into the home module
+            function loadPetFacts() {
+                const container = document.getElementById('pet-facts-container');
+                container.innerHTML = '';
+                
+                // Shuffle the array to show random facts
+                const shuffledFacts = [...petFacts].sort(() => 0.5 - Math.random());
+                
+                // Take first 3 facts
+                const selectedFacts = shuffledFacts.slice(0, 3);
+                
+                // Create cards for each fact
+                selectedFacts.forEach(fact => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div class="card-img">
+                            <img src="${fact.image}" alt="${fact.title}">
+                        </div>
+                        <div class="card-content">
+                            <h3>${fact.title}</h3>
+                            <p>${fact.content}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+            
+            // Load pet facts when page loads and home module is active
+            loadPetFacts();
+            
+            // Refresh facts button
+            document.getElementById('refresh-facts').addEventListener('click', loadPetFacts);
+        });
+    </script>
+</body>
+</html>
